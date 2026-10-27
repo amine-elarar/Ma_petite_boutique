@@ -1,7 +1,7 @@
 {
   "name": "maboutique",
   "version": "1.0.0",
-  "description": "",
+  "description": "- Rédiger 5 user stories - Dessiner le diagramme de cas d'utilisation - Dessiner le diagramme de classes - Dessiner le schéma relationnel - Créer les tickets Jira - Rédiger un premier README",
   "license": "ISC",
   "author": "",
   "type": "commonjs",
@@ -11,5 +11,19 @@
   },
   "dependencies": {
     "express": "^5.3.0"
-  }
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amine-elarar/Ma_petite_boutique.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/amine-elarar/Ma_petite_boutique/issues"
+  },
+  "homepage": "https://github.com/amine-elarar/Ma_petite_boutique#readme"
 }
