@@ -7,23 +7,10 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js"
   },
   "dependencies": {
     "express": "^5.3.0"
-  },
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
-  },
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/amine-elarar/Ma_petite_boutique.git"
-  },
-  "keywords": [],
-  "bugs": {
-    "url": "https://github.com/amine-elarar/Ma_petite_boutique/issues"
-  },
-  "homepage": "https://github.com/amine-elarar/Ma_petite_boutique#readme"
+  }
 }
