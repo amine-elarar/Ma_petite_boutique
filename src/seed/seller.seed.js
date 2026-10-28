@@ -17,14 +17,10 @@ const   insertProducts  = async () =>
     try {
 
         await  Product.deleteMany();
-        
 
-        await  Promise.all(productsList.map( async (item) => { 
-            const product = new Product(item);
-            await  product.save();
-        }))
-
+        await Product.insertMany(productsList);
         console.log("test");
+        process.exit();
 
         
         
