@@ -1,9 +1,12 @@
-const express  = require('express');
-const connect = require('./config/database.js')
+
+const express  = require('express')
+require('dotenv').config();
+require('./config/database.js');
+
 
 const app =  express();
 
 
+app.get('/api/health', (request, response) => { response.status(200).json({success:true, message:" hi endpiont"})})
 
-require('dotenv').config();
-app.listen(process.env.PORT , () =>  {console.log(`server is runnging ${process.env.PORT}`)});
+module.exports = app ;
