@@ -9,7 +9,7 @@ const productsList = [
             { name: "Clavier Mécanique", description: "RGB", priceCents: 6500, available: true },
             { name: "Souris Gamer", description: "Optique", priceCents: 2500, available: true },
             { name: "Tapis de souris", priceCents: 1000, available: true },
-            { name: "Écran 24 pouces", description: "Rupture de stock", priceCents: 15000, available: false } // هادا لي طلبو يكون غير متوفر
+            { name: "Écran 24 pouces", description: "Rupture de stock", priceCents: 15000, available: false }
         ];
 
 const   insertProducts  = async () => 
