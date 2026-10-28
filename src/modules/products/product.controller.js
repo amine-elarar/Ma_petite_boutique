@@ -14,4 +14,26 @@ const  getProducts =  async(request, response)=>
      }  
 }
 
-module.exports = {getProducts};
+const  createProducts = async(request , response) =>
+{
+    try {
+
+        const dataProduct = request.body;
+        const  newProduct = await Product.create(dataProduct);
+        response.status(201).json({ success: true, data: newProduct});
+
+    } catch (error) {
+        console.error(error);
+
+        response.status(400).json({
+            
+            success: false,
+            message: "not valid",
+            error: error.message
+        }); 
+        
+    }   
+    
+}
+
+module.exports = {getProducts ,createProducts };
