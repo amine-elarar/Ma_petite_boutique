@@ -8,7 +8,7 @@ const  register = async(request , response)=>
 {
     try 
     {
-    const  {name , email , password} = request.body
+    const  {name , email , password,role} = request.body
 
     // response.status(201).json(name);
     
@@ -25,7 +25,7 @@ const  register = async(request , response)=>
    const salt = await bcrypt.genSalt(10);
    const passwordHash = await bcrypt.hash(password, salt);
 
-   const user = await User.create({  name,email, passwordHash});
+   const user = await User.create({  name,email, passwordHash ,role});
    response.status(201).json({
             id: user._id,
             name: user.name,
