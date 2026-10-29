@@ -1,8 +1,7 @@
 const mongoose    = require('mongoose');
 
 
-
-const ProductSchema = mongoose.Schema(
+const ProductSchema =  new mongoose.Schema(
     {
         name:{
             type:String,
@@ -20,7 +19,8 @@ const ProductSchema = mongoose.Schema(
         available:{
             type:Boolean,
             default:true
-        }
-    }
+        },
+    },
+    { timeseries:true}
 )
 module.exports  =  mongoose.model('Product',ProductSchema);
