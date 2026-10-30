@@ -1,13 +1,11 @@
 const express = require('express');
-const {register ,login} =  require('./auth.controller');
+const { register, login } = require('./auth.controller.js');
+const { authMiddleware } = require('./auth.middleware.js');
 
-const {authMiddleware} = require('./auth.middleware');
-
-const route  = express.Router();
+const route = express.Router();
 
 route.post('/register', register);
 route.post('/login', login);
-
 
 route.get('/profile', authMiddleware, (request, response) => {
     response.status(200).json({ 
