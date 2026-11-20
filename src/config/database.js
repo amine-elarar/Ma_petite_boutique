@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.URL_MONGO)
-  .then(() => console.log("database connected successfully"))
-  .catch((err) => console.error("Database connection error:", err.message));
+const mongoUri = process.env.MONGODB_URI || process.env.URL_MONGO;
+
+if (mongoUri && process.env.NODE_ENV !== 'test') {
+  mongoose.connect(mongoUri)
+    .then(() => console.log("database connected successfully"))
+    .catch((err) => console.error("Database connection error:", err.message));
+}
+
+module.exports = mongoose;
