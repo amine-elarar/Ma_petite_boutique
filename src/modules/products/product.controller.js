@@ -1,81 +1,120 @@
 const mongoose = require('mongoose');
 const Product = require('./product.model.js');
 
-
 const getProducts = async (request, response) => {
-    try {
-        const products = await Product.find();
-        console.log(products);
-        response.status(200).json(products);
+  try {
+    const products = await Product.find();
+    response.status(200).json(products);
+  } catch (error) {
+    response.status(500).json({ error: { message: "Erreur serveur." } });
+  }
+};
 
-    } catch (error) {
-
+const getProductById = async (request, response) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(request.params.id)) {
+      return response.status(400).json({ error: { message: "Identifiant produit invalide." } });
     }
-}
+
+    const product = await Product.findById(request.params.id);
+    if (!product) {
+      return response.status(404).json({ error: { message: "Le produit demandé est introuvable." } });
+    }
+
+    response.status(200).json(product);
+  } catch (error) {
+    response.status(500).json({ error: { message: "Erreur serveur." } });
+  }
+};
 
 const createProducts = async (request, response) => {
-    try {
+  try {
+    const { name, description, priceCents, available } = request.body;
 
-        const dataProduct = request.body;
-        const newProduct = await Product.create(dataProduct);
-        response.status(201).json({ success: true, data: newProduct });
-
-    } catch (error) {
-        console.error(error);
-
-        response.status(400).json({
-
-            success: false,
-            message: "not valid",
-            error: error.message
-        });
-
+    if (!name || typeof name !== 'string' || !name.trim()) {
+      return response.status(400).json({ error: { message: "Le nom du produit est obligatoire." } });
     }
 
-}
-const getProductById = async (req, res) => {
-
-    try {
-        const product = await Product.findById(req.params.id);
-        if (!product) {
-            return res.status(404).json({ success: false, message: "Not found" });
-        }
-        res.status(200).json({ success: true, data: product });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+    if (!Number.isInteger(priceCents) || priceCents <= 0) {
+      return response.status(400).json({ error: { message: "Le prix doit être un entier positif en centimes." } });
     }
+
+    const newProduct = await Product.create({
+      name: name.trim(),
+      description: description ? String(description).trim() : '',
+      priceCents,
+      available: typeof available === 'boolean' ? available : true
+    });
+
+    response.status(201).json(newProduct);
+  } catch (error) {
+    response.status(400).json({ error: { message: "Données produit invalides." } });
+  }
 };
 
-const deleteProduct = async (req, res) => {
-    try {
-        const product = await Product.findByIdAndDelete(req.params.id);
-        if (!product) {
-            return res.status(404).json({ success: false, message: "Not found" });
-        }
-        res.status(200).json({ success: true, message: "Deleted" });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-};
 const updateProduct = async (request, response) => {
-    try {
-        const { id } = request.params;
-        const { name, price } = request.body;
-
-        const product = await Product.findByIdAndUpdate(
-            id,
-            { name, price },
-            { new: true }
-        );
-
-        if (!product)
-            return response.status(404).json({ error: { message: "Produit non trouvé." } });
-
-        response.status(200).json(product);
-    } catch (error) {
-        console.error(error);
-        response.status(500).json({ error: { message: "Erreur serveur." } });
+  try {
+    if (!mongoose.Types.ObjectId.isValid(request.params.id)) {
+      return response.status(400).json({ error: { message: "Identifiant produit invalide." } });
     }
+
+    const updates = {};
+
+    if (request.body.name !== undefined) {
+      if (typeof request.body.name !== 'string' || !request.body.name.trim()) {
+        return response.status(400).json({ error: { message: "Le nom du produit est invalide." } });
+      }
+      updates.name = request.body.name.trim();
+    }
+
+    if (request.body.description !== undefined) {
+      updates.description = String(request.body.description).trim();
+    }
+
+    if (request.body.priceCents !== undefined) {
+      if (!Number.isInteger(request.body.priceCents) || request.body.priceCents <= 0) {
+        return response.status(400).json({ error: { message: "Le prix doit être un entier positif en centimes." } });
+      }
+      updates.priceCents = request.body.priceCents;
+    }
+
+    if (request.body.available !== undefined) {
+      if (typeof request.body.available !== 'boolean') {
+        return response.status(400).json({ error: { message: "La disponibilité doit être un booléen." } });
+      }
+      updates.available = request.body.available;
+    }
+
+    const product = await Product.findByIdAndUpdate(request.params.id, updates, {
+      new: true,
+      runValidators: true
+    });
+
+    if (!product) {
+      return response.status(404).json({ error: { message: "Le produit demandé est introuvable." } });
+    }
+
+    response.status(200).json(product);
+  } catch (error) {
+    response.status(400).json({ error: { message: "Données produit invalides." } });
+  }
 };
 
-module.exports = { getProducts, createProducts, getProductById, deleteProduct, updateProduct };
+const deleteProduct = async (request, response) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(request.params.id)) {
+      return response.status(400).json({ error: { message: "Identifiant produit invalide." } });
+    }
+
+    const product = await Product.findByIdAndDelete(request.params.id);
+    if (!product) {
+      return response.status(404).json({ error: { message: "Le produit demandé est introuvable." } });
+    }
+
+    response.status(200).json({ message: "Produit supprimé." });
+  } catch (error) {
+    response.status(500).json({ error: { message: "Erreur serveur." } });
+  }
+};
+
+module.exports = { getProducts, createProducts, getProductById, updateProduct, deleteProduct };

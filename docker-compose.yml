@@ -1,0 +1,22 @@
+services:
+  api:
+    build: .
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - URL_MONGO=mongodb://mongo:27017/maboutique
+      - MONGODB_URI=mongodb://mongo:27017/maboutique
+      - JWT_SECRET=supersecretjwtkey
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

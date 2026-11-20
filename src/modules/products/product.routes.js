@@ -1,13 +1,13 @@
 const express = require('express');
-const { getProducts, createProducts, getProductById, deleteProduct, updateProduct } = require('./product.controller.js');
+const { getProducts, createProducts, getProductById, updateProduct, deleteProduct } = require('./product.controller.js');
 const { authMiddleware, isSeller } = require('../auth/auth.middleware.js');
 
-const productRoutes = express.Router();
+const route = express.Router();
 
-productRoutes.get('/products', getProducts);
-productRoutes.get('/products/:id', getProductById);
-productRoutes.post('/products', authMiddleware, isSeller, createProducts);
-productRoutes.delete('/products/:id', authMiddleware, isSeller, deleteProduct);
-productRoutes.put('/products/:id', authMiddleware, isSeller, updateProduct);
+route.get('/products', getProducts);
+route.get('/products/:id', getProductById);
+route.post('/products', authMiddleware, isSeller, createProducts);
+route.patch('/products/:id', authMiddleware, isSeller, updateProduct);
+route.delete('/products/:id', authMiddleware, isSeller, deleteProduct);
 
-module.exports = productRoutes;
+module.exports = route;
